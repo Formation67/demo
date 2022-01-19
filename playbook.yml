@@ -38,6 +38,9 @@
 
   - name: creating docker conteneur
     command: docker run -d --name demo -p 8080:8080 demo
+    
+  - name: Install docker-py
+    pip: name=docker-py version=1.9.0
 
   - name: Log into DockerHub
     docker_login:
