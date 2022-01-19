@@ -1,0 +1,41 @@
+---
+- hosts: docker
+  become: true
+  remote_user: vagrant
+  vars:
+    - remote_dir: /home/vagrant
+    - local_dir: /var/lib/jenkins/workspace/02_second-pipeline
+    - remote_user: vagrant
+  tasks:
+  - name: stop if we have old docker container
+    command: docker stop demo
+    ignore_errors: yes
+
+  - name: remove stopped docker container
+    command: docker rm demo
+    ignore_errors: yes
+
+  - name: remove current docker image
+    command: docker rmi demo
+    ignore_errors: yes
+
+  - name: copying Dockerfile
+    become: true
+    copy:
+      src: "{{ local_dir }}/Dockerfile"
+      dest: "{{ remote_dir }}"
+      owner: "{{ remote_user }}"
+      group: "{{ remote_user }}"
+
+  - name: "Copying the jar"
+    copy: src={{item}} dest="{{ remote_dir }}/demo.jar"  owner="{{ remote_user }}" group="{{ remote_user }}" mode=0755    
+    with_fileglob: "{{ local_dir }}/target/*.jar"
+
+  - name: building docker image using jar file
+    command: docker build -t demo .
+    args:
+      chdir: "{{ remote_dir }}"
+
+  - name: creating docker conteneur
+    command: docker run -d --name demo -p 8080:8080 demo
+
