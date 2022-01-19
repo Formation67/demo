@@ -28,7 +28,7 @@
       group: "{{ remote_user }}"
 
   - name: "Copying the jar"
-    copy: src={{item}} dest="{{ remote_dir }}/demo.jar"  owner="{{ remote_user }}" group="{{ remote_user }}" mode=0755    
+    copy: src={{item}} dest="{{ remote_dir }}/demo.jar"  owner="{{ remote_user }}" group="{{ remote_user }}" mode=0755
     with_fileglob: "{{ local_dir }}/target/*.jar"
 
   - name: building docker image using jar file
@@ -39,3 +39,19 @@
   - name: creating docker conteneur
     command: docker run -d --name demo -p 8080:8080 demo
 
+  - name: Log into DockerHub
+    docker_login:
+      username: doum167
+      password: formation167
+      email: formation167@gmail.com
+
+  - name: Tag and push to docker hub
+    docker_image:
+      name: demo:latest
+      repository: doum167/boot:latest
+      push: yes
+
+  - name: Log out of DockerHub
+    docker_login:
+      state: absent
+      email: formation167@gmail.com
