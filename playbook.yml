@@ -53,6 +53,7 @@
       name: demo:latest
       repository: doum167/boot:latest
       push: yes
+      source: local
 
   - name: Log out of DockerHub
     docker_login:
