@@ -1,0 +1,27 @@
+---
+- hosts: docker
+  become: true
+  remote_user: vagrant
+  tasks:
+  - include_vars: name_vars.yml
+
+  - name: Install docker-py
+    pip: name=docker-py version=1.9.0
+
+  - name: Log into DockerHub
+    docker_login:
+      username: "{{dhub_username}}"
+      password: "{{dhub_password}}"
+      email: "{{dhub_email}}"
+
+  - name: Tag and push to docker hub
+    docker_image:
+      name: "{{deploy_name}}:{{tag}}"
+      repository: "{{dhub_username}}/{{deploy_name}}:{{tag}}"
+      push: yes
+      source: local
+
+  - name: Log out of DockerHub
+    docker_login:
+      state: absent
+      email: "{{dhub_email}}"

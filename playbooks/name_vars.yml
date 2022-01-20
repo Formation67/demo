@@ -1,0 +1,10 @@
+remote_dir: /home/vagrant
+local_dir: /var/lib/jenkins/workspace/02_second-pipeline
+remote_user: vagrant
+deploy_name: demo
+dhub_username: doum167
+dhub_password: formation167
+dhub_email: formation167@gmail.com
+tag: latest
+
+

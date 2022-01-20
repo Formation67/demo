@@ -1,0 +1,10 @@
+---
+- hosts: docker
+  become: true
+  remote_user: vagrant
+  tasks:
+  - include_vars: name_vars.yml
+
+  - name: creating docker conteneur
+    command: docker run -d --name {{deploy_name}} -p 8080:8080 {{deploy_name}}
+    

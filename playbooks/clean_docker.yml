@@ -1,0 +1,23 @@
+---
+- name: Stop / remove container and images
+  hosts: docker
+  become: true
+  remote_user: vagrant
+  tasks:
+  - include_vars: name_vars.yml
+
+  - name: stop if we have old docker container
+    command: docker stop {{deploy_name}}
+    ignore_errors: yes
+
+  - name: remove stopped docker container
+    command: docker rm {{deploy_name}}
+    ignore_errors: yes
+
+  - name: remove current docker image
+    command: docker rmi {{deploy_name}}
+    ignore_errors: yes
+
+  - name: remove current docker image
+    command: docker rmi doum167/{{deploy_name}}
+    ignore_errors: yes

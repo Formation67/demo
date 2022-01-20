@@ -1,0 +1,23 @@
+---
+- hosts: docker
+  become: true
+  remote_user: vagrant
+  tasks:
+  - include_vars: name_vars.yml
+
+  - name: copying Dockerfile
+    become: true
+    copy:
+      src: "{{ local_dir }}/Dockerfile"
+      dest: "{{ remote_dir }}"
+      owner: "{{ remote_user }}"
+      group: "{{ remote_user }}"
+
+  - name: "Copying the jar"
+    copy: src={{item}} dest="{{ remote_dir }}/{{deploy_name}}.jar"  owner="{{ remote_user }}" group="{{ remote_user }}" mode=0755
+    with_fileglob: "{{ local_dir }}/target/*.jar"
+
+  - name: building docker image using jar file
+    command: docker build -t {{deploy_name}} .
+    args:
+      chdir: "{{ remote_dir }}"
