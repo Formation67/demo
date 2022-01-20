@@ -5,6 +5,10 @@
   tasks:
   - include_vars: name_vars.yml
 
+  - name: remove current docker image
+    command: docker rmi "{{dhub_username}}/{{deploy_name}}"
+    ignore_errors: yes
+
   - name: creating docker conteneur
-    command: docker run -d --name {{deploy_name}} -p 8080:8080 {{deploy_name}}
+    command: docker run -d --name "{{deploy_name}}" -p 8080:8080 "{{dhub_username}}/{{deploy_name}}:{{tag}}"
     

@@ -7,17 +7,17 @@
   - include_vars: name_vars.yml
 
   - name: stop if we have old docker container
-    command: docker stop {{deploy_name}}
+    command: docker stop "{{deploy_name}}"
     ignore_errors: yes
 
   - name: remove stopped docker container
-    command: docker rm {{deploy_name}}
+    command: docker rm "{{deploy_name}}"
     ignore_errors: yes
 
   - name: remove current docker image
-    command: docker rmi {{deploy_name}}
+    command: docker rmi "{{deploy_name}}"
     ignore_errors: yes
 
   - name: remove current docker image
-    command: docker rmi doum167/{{deploy_name}}
+    command: docker rmi "{{dhub_username}}/{{deploy_name}}"
     ignore_errors: yes
