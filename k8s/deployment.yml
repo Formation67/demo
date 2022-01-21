@@ -1,0 +1,41 @@
+kind: Deployment
+metadata:
+  name: demo
+  labels:
+    app: demo
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: demo
+
+  template:
+    metadata:
+      labels:
+        app: demo
+        tier: demo
+    spec:
+      containers:
+        - name: demo
+          image: doum167/demo:latest
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
+            name: demo
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo
+  labels:
+    app: demo
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: demo
+    tier: demo
+  type: LoadBalancer
